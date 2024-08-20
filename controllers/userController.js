@@ -43,13 +43,72 @@ export const regsiter=async(req,res)=>{
 }
 
 
+export const login = async(req,res)=>{
+    try {
+     const { username ,password } = req.body
+     if(!username || !password){
+       return res.status(400).json({
+         message:'All fields are required'
+       })  
+     }
+     const user = await userModel.findOne({username})
+     if(!user){
+         return res.status(401).json({
+             message:'Invalid username & password'
+           })  
+          }
+     const comparePassword = await bcrypt.compare(password,user.password)
+     if(!comparePassword){
+      return res.status(401).json({
+        message:'Invalid email & password'
+      })  
+     }
+    sendToken(res,user,`Welcome back ${user.name}`,201)
+    } catch (error) {
+     console.log(error)
+     res.status(500).json({
+         message:"Internal Server error"
+     })
+    }
+ }
+ 
+
+
 export const getMyProfile=async(req,res)=>{
     try {
      const currentUser = await userModel.findById(req.user._id)
+     if(!currentUser){
+        return res.status(401).json({
+            message:"Invalid User"
+        })
+     }
      res.status(200).json(currentUser)       
     } catch (error) {
         console.log(error)
     }
 }
+
+export const logout=async(req,res)=>{
+    try {
+      res.cookie('token',null,{
+        expires:new Date(Date.now()),
+        httpOnly:true,
+        secure:true,
+        sameSite:'none'
+      }).json(
+        {   success:true,
+            message:"Logout Successfully"
+         }
+     )
+     res.status(200).json(currentUser)       
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({
+            message:"Internal Server error"
+        })
+    }
+}
+
+
 
 

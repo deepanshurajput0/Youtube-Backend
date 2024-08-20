@@ -10,15 +10,28 @@ const videoSchema = new mongoose.Schema({
         required: true
     },
     tags: {
-        type: [String], // Tags should be an array of strings
+        type: [String], 
         required: true
     },
     thumbnailPic: {
-        type: String
+        public_id:{
+            type:String,
+            required:true
+        },
+        url:{
+            type:String,
+            required:true
+        }
     },
     video: {
-        type: String,
-        required: true
+        public_id:{
+            type:String,
+            required:true
+        },
+        url:{
+            type:String,
+            required:true
+        }
     },
     uploadBy: {
         type: mongoose.Schema.Types.ObjectId,
@@ -43,3 +56,4 @@ const videoSchema = new mongoose.Schema({
 const videoModel = mongoose.model('Video', videoSchema);
 
 export default videoModel;
+
