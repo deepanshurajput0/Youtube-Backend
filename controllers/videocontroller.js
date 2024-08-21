@@ -140,7 +140,7 @@ export const deleteVideo=async(req,res)=>{
     res.status(200).json({
       message: 'Video Deleted Successfully'
     });
-    
+
   } catch (error) {
     console.log(error)
     res.status(500).json({
@@ -149,3 +149,21 @@ export const deleteVideo=async(req,res)=>{
   }
 }
 
+
+
+
+export const searchVideo =async(req,res)=>{
+  try {
+    const videoSearch = req.query.search || ''
+    const videofunc ={
+      title:{$regex:videoSearch, $options:'i' }
+    }
+    const videos = await videoModel.find(videofunc)
+    res.status(200).json(videos)
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+}
