@@ -4,6 +4,7 @@ import userRoutes from './routes/userRoutes.js'
 import videoRoutes from './routes/videoRoutes.js'
 import commentRoutes from './routes/commentRoutes.js'
 import likeRoutes from './routes/likeRoutes.js'
+import subscribeRoutes from './routes/subscriptionRoutes.js'
 import cloudinary from 'cloudinary'
 import { connectDB } from './config/db.js'
 import cookieParser from 'cookie-parser'
@@ -25,6 +26,7 @@ app.use('/api/v1',userRoutes)
 app.use('/api/v1/video',videoRoutes)
 app.use('/api/v1/video',commentRoutes)
 app.use('/api/v1/video',likeRoutes)
+app.use('/api/v1/user',subscribeRoutes)
 
 app.listen(process.env.PORT,()=>{
     console.log(`Server is running on Port ${process.env.PORT}`)
