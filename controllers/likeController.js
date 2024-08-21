@@ -1,4 +1,5 @@
 import likeModel from "../models/LikeModel.js"
+import videoModel from "../models/videoModel.js"
 
 export const likeVideo =async(req,res)=>{
   try {
@@ -8,6 +9,7 @@ export const likeVideo =async(req,res)=>{
         likedBy:currentUser,
         video:id
      })
+     await videoModel.findByIdAndUpdate(id,{$push:{likes:currentUser}})
      res.status(201).json({
         message: "Video Liked successfully."
       }); 
@@ -30,6 +32,7 @@ export const UnlikeVideo =async(req,res)=>{
             message:'Like & user not found'
         })
       } 
+      await videoModel.findByIdAndUpdate(id,{$pull:{likes:currentUser}})
       await likeModel.deleteOne()
        res.status(201).json({
           message: "Video unLiked successfully"
