@@ -167,3 +167,44 @@ export const searchVideo =async(req,res)=>{
     });
   }
 }
+
+export const updateViews = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const currentUser = req.user._id;
+
+    // Find the video and check if the user has already viewed it
+    const video = await videoModel.findById(id);
+
+    if (!video) {
+      return res.status(404).json({
+        message: "Video not found",
+      });
+    }
+
+    // Check if the current user has already viewed the video
+    if (video.viewedBy.includes(currentUser)) {
+      return res.status(200).json({
+        message: "View already counted",
+        views: video.views,
+      });
+    }
+
+    // Increment the view count and add the user to the viewedBy array
+    video.views += 1;
+    video.viewedBy.push(currentUser);
+
+    await video.save();
+
+    res.status(200).json({
+      message: "View count updated successfully",
+      views: video.views,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+};
+

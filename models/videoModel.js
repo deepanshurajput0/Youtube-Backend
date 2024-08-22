@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Mongoose } from "mongoose";
 
 const videoSchema = new mongoose.Schema({
     title: {
@@ -38,12 +38,13 @@ const videoSchema = new mongoose.Schema({
         ref: "User",
         required: true
     },
-    views: {
-        type: Number,
-        default: 0
+    viewedBy: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref:'User',
+        default: []
     },
     likes: {
-        type: [mongoose.Schema.Types.ObjectId], // Corrected syntax for an array of ObjectIds
+        type: [mongoose.Schema.Types.ObjectId],
         ref: 'User',
         default: []
     },
